@@ -32,15 +32,58 @@ Google Sheet ──(Apps Script, UrlFetchApp)──► Apify API ──► TikTo
 ## Requirements
 
 - A Google account that is allowed to use Apps Script and to connect to external services (`api.apify.com`).
-- An [Apify](https://apify.com) account. The Free plan includes USD 5 of credit per month.
+- An [Apify](https://apify.com?fpr=f5khma) account. The Free plan includes USD 5 of credit per month.
+
+## Using Apify
+
+[Apify](https://apify.com?fpr=f5khma) is a cloud platform that runs ready-made scrapers called *Actors*. This tool calls the [`clockworks/tiktok-scraper`](https://apify.com/clockworks/tiktok-scraper) Actor through the Apify API: Google Sheets sends the video links, Apify fetches the data from TikTok on its own servers, and the script reads the results back.
+
+> The sign-up links to apify.com in this README are referral links (`?fpr=f5khma`).
+
+### Create an account
+
+1. Go to [apify.com](https://apify.com?fpr=f5khma) and click **Sign up**.
+2. Sign up with Google, GitHub or an email address. No credit card is needed for the Free plan.
+3. You land in **Apify Console**, the web dashboard where you manage tokens, runs and billing.
+
+### Get your API token
+
+1. In Apify Console, open **Settings → API & Integrations**.
+2. Copy the **Personal API token**.
+3. In the Google Sheet, use **TikTok KOL → 2. Nhập Apify API token** and paste it.
+
+Keep the token private: anyone who has it can run Actors and spend your credit. If it leaks, create a new token in the same screen, delete the old one and enter the new token in the sheet.
+
+### Try the Actor in the browser (optional)
+
+You can check that the Actor works before using the sheet:
+
+1. Open the [TikTok Scraper Actor page](https://apify.com/clockworks/tiktok-scraper) and click **Try for free** (or find it in Console → **Store**).
+2. In the input form, add a video link to the video URL field (`postURLs`), and leave the video / cover download options turned off.
+3. Click **Start**. When the run finishes, the **Output** tab shows fields such as `playCount`, `diggCount`, `commentCount`, `shareCount` and `collectCount`. These are the values the script writes to the sheet.
+
+### Monitor runs and usage
+
+- **Runs:** every click on GET creates one Actor run per batch of up to 50 links. You can see each run, its status, log and results in Console → **Runs**. This is the first place to look when a row shows an Apify error.
+- **Usage:** Console → **Billing** shows how much of the monthly credit you have used. Free credit renews every month.
+- **Spending cap:** set a limit under **Billing → Usage limits**, especially when several people share one token.
+
+### Pricing and plans
+
+- The Actor charges per result: about **USD 1.70 per 1,000 videos** on the Free plan. Higher Apify plans get lower per-result prices. Check the Actor's **Pricing** tab for current prices.
+- The **Free plan** includes USD 5 of credit per month, enough for about 3,000 video lookups.
+- When the credit runs out, Apify refuses new runs and the sheet shows `LỖI: Apify HTTP 402 …`. Wait for the monthly reset or upgrade your plan on [apify.com](https://apify.com?fpr=f5khma).
+- The script turns off all paid add-ons (video, cover, avatar and subtitle downloads), so you only pay for the basic result.
 
 ## Setup
 
 ### 1. Get an Apify token
 
-1. Sign up at [apify.com](https://apify.com) (Free plan).
+1. Sign up at [apify.com](https://apify.com?fpr=f5khma) (Free plan).
 2. Open Apify Console → **Settings → API & Integrations** and copy your **Personal API token**.
 3. Recommended: set a spending cap under **Billing → Usage limits**.
+
+See [Using Apify](#using-apify) for details.
 
 ### 2. Install the script
 

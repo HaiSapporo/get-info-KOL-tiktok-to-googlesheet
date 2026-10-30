@@ -32,15 +32,58 @@ Google スプレッドシート ──(Apps Script, UrlFetchApp)──► Apify 
 ## 必要なもの
 
 - Apps Script の利用と外部サービス（`api.apify.com`）への接続が許可された Google アカウント
-- [Apify](https://apify.com) のアカウント（Free プランで毎月 5 USD 分のクレジットあり）
+- [Apify](https://apify.com?fpr=f5khma) のアカウント（Free プランで毎月 5 USD 分のクレジットあり）
+
+## Apify の使い方
+
+[Apify](https://apify.com?fpr=f5khma) は、*Actor* と呼ばれる既製のスクレイパーをクラウドで実行できるプラットフォームです。このツールは Apify API 経由で [`clockworks/tiktok-scraper`](https://apify.com/clockworks/tiktok-scraper) Actor を呼び出します。Google スプレッドシートが動画リンクを送り、Apify が自社のサーバーで TikTok からデータを取得し、スクリプトがその結果を読み込みます。
+
+> この README 内の apify.com への登録リンクは紹介リンク（`?fpr=f5khma`）です。
+
+### アカウントを作成する
+
+1. [apify.com](https://apify.com?fpr=f5khma) を開き、**Sign up** をクリックします。
+2. Google、GitHub、またはメールアドレスで登録します。Free プランではクレジットカードは不要です。
+3. 登録後は **Apify Console**（トークン、実行履歴、請求を管理する Web 画面）が開きます。
+
+### API トークンを取得する
+
+1. Apify Console で **Settings → API & Integrations** を開きます。
+2. **Personal API token** をコピーします。
+3. Google スプレッドシートで **TikTok KOL → 2. Nhập Apify API token** を選び、貼り付けます。
+
+トークンは他人に教えないでください。トークンを持っている人は誰でも Actor を実行し、あなたのクレジットを使えます。漏れた場合は同じ画面で新しいトークンを作成し、古いトークンを削除してから、シートに新しいトークンを入力し直してください。
+
+### ブラウザで Actor を試す（任意）
+
+シートで使う前に、Actor が動くかどうかを確認できます。
+
+1. [TikTok Scraper の Actor ページ](https://apify.com/clockworks/tiktok-scraper) を開き、**Try for free** をクリックします（Console → **Store** から探すこともできます）。
+2. 入力フォームの動画 URL 欄（`postURLs`）に動画リンクを追加します。動画やカバー画像のダウンロードはオフのままにします。
+3. **Start** をクリックします。実行が終わると **Output** タブに `playCount`、`diggCount`、`commentCount`、`shareCount`、`collectCount` などが表示されます。これらがスクリプトがシートに書き込む値です。
+
+### 実行履歴と利用量を確認する
+
+- **実行履歴：** GET を押すと、最大 50 リンクごとに 1 回 Actor が実行されます。各実行の状態、ログ、結果は Console → **Runs** で確認できます。行に Apify のエラーが表示されたときは、まずここを確認してください。
+- **利用量：** Console → **Billing** で、今月のクレジットをどれだけ使ったか確認できます。無料クレジットは毎月リセットされます。
+- **利用額の上限：** **Billing → Usage limits** で上限を設定しておきましょう。複数人で 1 つのトークンを共有する場合は特に重要です。
+
+### 料金とプラン
+
+- この Actor は結果ごとの課金で、Free プランでは **動画 1,000 件あたり約 1.70 USD** です。上位プランほど 1 件あたりの単価は下がります。最新の料金は Actor の **Pricing** タブで確認してください。
+- **Free プラン** には毎月 5 USD 分のクレジットがあり、約 3,000 件の取得に足ります。
+- クレジットを使い切ると Apify は新しい実行を受け付けず、シートには `LỖI: Apify HTTP 402 …` と表示されます。翌月のリセットを待つか、[apify.com](https://apify.com?fpr=f5khma) でプランをアップグレードしてください。
+- スクリプトは有料オプション（動画・カバー画像・アバター・字幕のダウンロード）をすべてオフにしているため、基本の結果分だけが課金されます。
 
 ## セットアップ
 
 ### 1. Apify トークンを取得する
 
-1. [apify.com](https://apify.com) に登録します（Free プラン）。
+1. [apify.com](https://apify.com?fpr=f5khma) に登録します（Free プラン）。
 2. Apify Console → **Settings → API & Integrations** を開き、**Personal API token** をコピーします。
 3. 推奨：**Billing → Usage limits** で利用額の上限を設定します。
+
+詳しくは [Apify の使い方](#apify-の使い方) を参照してください。
 
 ### 2. スクリプトを設置する
 

@@ -23,13 +23,50 @@ Google Sheet ──(Apps Script, UrlFetchApp)──► Apify API ──► TikTo
 
 ---
 
+## Hướng dẫn sử dụng Apify
+
+[Apify](https://apify.com?fpr=f5khma) là nền tảng đám mây chạy sẵn các công cụ thu thập dữ liệu, gọi là *Actor*. Tool này gọi Actor [`clockworks/tiktok-scraper`](https://apify.com/clockworks/tiktok-scraper) qua Apify API: Google Sheet gửi link video, Apify lấy dữ liệu từ TikTok trên server của họ, rồi script đọc kết quả về.
+
+> Các link đăng ký apify.com trong README này là link giới thiệu (`?fpr=f5khma`).
+
+### Tạo tài khoản
+1. Vào [apify.com](https://apify.com?fpr=f5khma) → bấm **Sign up**.
+2. Đăng ký bằng Google, GitHub hoặc email. Gói Free không cần thẻ tín dụng.
+3. Sau khi đăng ký, bạn vào **Apify Console**, trang quản lý token, lịch sử chạy và chi phí.
+
+### Lấy API token
+1. Trong Apify Console, mở **Settings → API & Integrations**.
+2. Copy **Personal API token**.
+3. Trong Google Sheet, chọn menu **TikTok KOL → 2. Nhập Apify API token** rồi dán vào.
+
+Giữ token bí mật: ai có token đều chạy được Actor và tiêu credit của bạn. Nếu lỡ lộ, tạo token mới ở cùng màn hình, xoá token cũ rồi nhập lại token mới vào Sheet.
+
+### Chạy thử Actor trên trình duyệt (tuỳ chọn)
+Có thể kiểm tra Actor chạy được trước khi dùng Sheet:
+1. Mở [trang Actor TikTok Scraper](https://apify.com/clockworks/tiktok-scraper) → bấm **Try for free** (hoặc tìm trong Console → **Store**).
+2. Trong form input, thêm link video vào ô URL video (`postURLs`); để tắt các tuỳ chọn tải video / ảnh bìa.
+3. Bấm **Start**. Khi chạy xong, tab **Output** hiện các trường `playCount`, `diggCount`, `commentCount`, `shareCount`, `collectCount`. Đây chính là các số script ghi vào Sheet.
+
+### Theo dõi lượt chạy và chi phí
+- **Lượt chạy:** mỗi lần bấm GET tạo 1 lượt chạy Actor cho mỗi nhóm tối đa 50 link. Xem trạng thái, log và kết quả từng lượt ở Console → **Runs**. Khi một dòng báo lỗi Apify, hãy xem ở đây trước.
+- **Chi phí đã dùng:** Console → **Billing** cho biết đã dùng bao nhiêu credit trong tháng. Credit miễn phí được làm mới mỗi tháng.
+- **Giới hạn chi tiêu:** đặt ở **Billing → Usage limits**, nhất là khi nhiều người dùng chung 1 token.
+
+### Giá và các gói
+- Actor tính phí theo kết quả: khoảng **1,70 USD / 1.000 video** với gói Free; gói cao hơn có đơn giá thấp hơn. Xem giá mới nhất ở tab **Pricing** của Actor.
+- **Gói Free** có 5 USD credit mỗi tháng, đủ khoảng 3.000 lượt lấy số liệu.
+- Hết credit thì Apify từ chối chạy, Sheet hiện `LỖI: Apify HTTP 402 …`. Chờ sang tháng mới hoặc nâng cấp gói tại [apify.com](https://apify.com?fpr=f5khma).
+- Script đã tắt toàn bộ tuỳ chọn tính phí thêm (tải video, ảnh bìa, avatar, phụ đề), nên chỉ trả phí cho kết quả cơ bản.
+
+---
+
 ## Phân chia đầu việc
 
 ### Giai đoạn 0 — Chuẩn bị (≈30 phút)
 | # | Việc | Người làm |
 |---|------|-----------|
 | 0.1 | Xin IT duyệt việc gửi link video công khai sang Apify (api.apify.com) | Bạn + IT |
-| 0.2 | Đăng ký tài khoản tại apify.com (gói Free) | Bạn |
+| 0.2 | Đăng ký tài khoản tại [apify.com](https://apify.com?fpr=f5khma) (gói Free), xem [Hướng dẫn sử dụng Apify](#hướng-dẫn-sử-dụng-apify) | Bạn |
 | 0.3 | Lấy token: Apify Console → **Settings → API & Integrations** → copy *Personal API token* | Bạn |
 | 0.4 | (Nên làm) Đặt giới hạn chi tiêu trong Apify: **Billing → Usage limits** | Bạn |
 
