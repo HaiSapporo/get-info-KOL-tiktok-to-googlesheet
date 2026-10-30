@@ -1,5 +1,7 @@
 /**
  * TikTok KOL Tracker — Google Sheets + Apps Script + Apify
+ * Version: 1.0.0
+ * https://github.com/HaiSapporo/get-info-KOL-tiktok-to-googlesheet
  *
  * TikTok chặn request trực tiếp từ server Google, nên script gửi danh sách
  * link video sang Apify (actor "clockworks/tiktok-scraper"), chờ chạy xong
