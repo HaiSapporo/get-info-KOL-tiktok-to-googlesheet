@@ -115,10 +115,24 @@ const PLATFORMS = {
     validate: function (link) {
       if (!/threads\.(net|com)/i.test(link)) return 'Không phải link Threads';
       if (this.extractId(link)) return null;
+      if (/threads\.(net|com)\/share\/[A-Za-z0-9_-]+/i.test(link)) return null; // link share, đổi ở resolve
+
       if (/threads\.(net|com)\/@[^/?#]+\/?(\?|#|$)/i.test(link)) {
         return 'Đây là link trang cá nhân — hãy dán link của từng bài (…/post/CODE)';
       }
       return 'Không tìm được mã bài viết từ link';
+    },
+    /**
+     * Link share (threads.com/share/XXXX) không chứa mã bài viết. Threads trả về
+     * redirect 302 tới link đầy đủ …/@user/post/CODE, nên đọc header Location.
+     */
+    resolve: function (link) {
+      if (this.extractId(link)) return link;
+      const res = UrlFetchApp.fetch(link, { followRedirects: false, muteHttpExceptions: true });
+      const h = res.getHeaders();
+      const location = h['Location'] || h['location'] || '';
+      if (this.extractId(location)) return location;
+      throw new Error('Không mở được link share — hãy mở link trên trình duyệt rồi copy link dạng threads.com/@user/post/…');
     },
     buildInput: function (links) {
       return {
@@ -328,9 +342,13 @@ function updateRows_(p, sheet, rows) {
   rows.forEach(function (row) {
     const link = String(sheet.getRange(row, L.LINK).getValue()).trim();
     if (!link) return;
-    const err = p.validate(link);
+    let err = p.validate(link);
+    let target = link; // link thực sự gửi cho Apify
+    if (!err && p.resolve) {
+      try { target = p.resolve(link); } catch (e) { err = e.message; }
+    }
     if (err) writeError_(sheet, L, row, new Date(), err);
-    else jobs.push({ row: row, link: link, key: p.extractId(link) || link });
+    else jobs.push({ row: row, link: link, target: target, key: p.extractId(target) || target });
   });
   const total = jobs.length;
   if (!total) return { done: 0, total: 0, skipped: 0 };
@@ -338,7 +356,7 @@ function updateRows_(p, sheet, rows) {
 
   // 2. Trừ hạn mức theo số bài đăng khác nhau (cùng 1 bài dán nhiều dòng / nhiều dạng link chỉ tính 1)
   const linkOfKey = {};
-  jobs.forEach(function (j) { if (!linkOfKey[j.key]) linkOfKey[j.key] = j.link; });
+  jobs.forEach(function (j) { if (!linkOfKey[j.key]) linkOfKey[j.key] = j.target; });
   const keys = Object.keys(linkOfKey);
   const granted = reserveQuota_(keys.length);
   const allowed = {};

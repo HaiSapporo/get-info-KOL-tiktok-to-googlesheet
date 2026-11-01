@@ -20,7 +20,8 @@ Sau này có thể thêm nền tảng khác (xem [Thêm nền tảng mới](#th�
 - Mỗi nền tảng có sheet lịch sử riêng (`TikTok_LichSu`, `Threads_LichSu`), lưu lại mỗi lần lấy thành công.
 - **Hạn mức:** tối đa **500 link/ngày** và **2.000 link/tháng**, tính chung mọi nền tảng, để không vượt chi phí Apify.
 - Kiểm tra link trước khi gọi API: link profile, link sai nền tảng và link trùng không tốn hạn mức.
-- Cùng 1 bài dán 2 lần, hoặc dán bằng 2 dạng link (vd `threads.net` và `threads.com`), chỉ lấy và tính 1 lần.
+- Link được hỗ trợ: TikTok đầy đủ và rút gọn (`vt.tiktok.com`, `vm.tiktok.com`); Threads dạng bài viết (`threads.net` / `threads.com/@user/post/…`) và link share (`threads.com/share/…`, script tự mở để tìm ra bài).
+- Cùng 1 bài dán 2 lần, hoặc dán bằng 2 dạng link (vd link share và link đầy đủ), chỉ lấy và tính 1 lần.
 - Cột Trạng thái báo rõ từng dòng; dòng lỗi được xoá số liệu cũ.
 - API token Apify lưu trong Script Properties, không nằm trong code hay Sheet.
 
@@ -121,6 +122,7 @@ Giữ token bí mật: ai có token đều chạy được Actor và tiêu credi
 |------------|------------------|
 | Link TikTok đầy đủ / rút gọn `vt.tiktok.com` | OK |
 | Link Threads `threads.net` hoặc `threads.com` | OK |
+| Link share Threads `threads.com/share/…` | OK (script tự đổi sang link đầy đủ). Nếu không mở được: `LỖI: Không mở được link share…` |
 | Cùng 1 bài dán 2 dòng / 2 dạng link | Cả 2 dòng OK, chỉ tính 1 lượt hạn mức |
 | Bài đã xoá / riêng tư | `LỖI: NOT_FOUND …` (hoặc mã lỗi Apify khác) |
 | Link profile | `LỖI: Đây là link trang cá nhân…` (không tính hạn mức) |

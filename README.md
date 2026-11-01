@@ -21,7 +21,8 @@ No software to install. Everything runs inside Google Sheets, which makes it a g
 - A separate history sheet per platform (`TikTok_LichSu`, `Threads_LichSu`) that logs every successful fetch.
 - **Usage limits:** at most **500 links per day** and **2,000 links per month** across all platforms, to keep Apify costs under control.
 - Links are checked before calling the API: profile links, links from another site and duplicates cost nothing.
-- The same post pasted twice, or in two URL forms (e.g. `threads.net` and `threads.com`), is fetched and counted only once.
+- Accepted links: TikTok full and short links (`vt.tiktok.com`, `vm.tiktok.com`); Threads post links (`threads.net` / `threads.com/@user/post/…`) and share links (`threads.com/share/…`, opened by the script to find the post).
+- The same post pasted twice, or in two URL forms (e.g. a share link and the full link), is fetched and counted only once.
 - Clear per-row status messages; a failed row has its old numbers cleared.
 - The Apify API token is stored in Script Properties, never in the code or the sheet.
 
