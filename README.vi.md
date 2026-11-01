@@ -105,14 +105,14 @@ Giữ token bí mật: ai có token đều chạy được Actor và tiêu credi
 ### Giai đoạn 1b — Tạo nút GET (≈5 phút)
 | # | Việc |
 |---|------|
-| 1b.1 | Mở sheet `TikTok`: **Insert → Drawing** → vẽ hình chữ nhật, gõ chữ **GET** → *Save and Close* |
+| 1b.1 | Mở sheet `TikTok`: **Insert → Drawing** → vẽ hình chữ nhật, gõ chữ **GET** → *Save and Close* → đặt nút ở **dòng 1–4** (vùng trống dành cho nút; tiêu đề bảng ở dòng 5 được cố định nên nút luôn hiện) |
 | 1b.2 | Bấm vào nút → dấu **⋮** → **Assign script** → gõ `getStats` → OK |
 | 1b.3 | Làm lại tương tự ở sheet `Threads`. `getStats` luôn chạy cho sheet đang mở, nên mọi nút dùng chung 1 hàm |
 | 1b.4 | (Nên làm) **Data → Protect sheets and ranges**: chỉ để nhân viên sửa cột A |
 
-**Nâng cấp từ bản 1.x (TikTok KOL Tracker):** dán `Code.gs` mới và chạy **1. Tạo sheet & tiêu đề** một lần. Sheet cũ `KOL_Tracking` và `Lich_Su` được đổi tên thành `TikTok` và `TikTok_LichSu`; dữ liệu, cột và nút GET cũ vẫn dùng được. Token đã lưu vẫn giữ nguyên.
+**Nâng cấp từ bản 1.x (TikTok KOL Tracker):** dán `Code.gs` mới và chạy **1. Tạo sheet & tiêu đề** một lần. Sheet cũ `KOL_Tracking` và `Lich_Su` được đổi tên thành `TikTok` và `TikTok_LichSu`, và 4 dòng trống được chèn phía trên tiêu đề cũ để tiêu đề xuống dòng 5; dữ liệu, cột và nút GET cũ vẫn dùng được. Token đã lưu vẫn giữ nguyên.
 
-**Cách nhân viên dùng:** mở sheet nền tảng → dán link vào **cột A** (mỗi dòng 1 link, từ dòng 2) → bấm **GET** → chờ 1–2 phút → số liệu hiện ở các cột bên cạnh.
+**Cách nhân viên dùng:** mở sheet nền tảng → dán link vào **cột A** (mỗi dòng 1 link, từ dòng 6, ngay dưới tiêu đề ở dòng 5) → bấm **GET** → chờ 1–2 phút → số liệu hiện ở các cột bên cạnh.
 - Mỗi lần bấm, script lấy lại số liệu cho **tất cả** link trong sheet. Muốn tiết kiệm thì xoá link cũ đã xong trước khi dán đợt mới (số liệu cũ vẫn còn trong sheet lịch sử), hoặc chọn dòng rồi dùng menu **Chỉ lấy các dòng đang chọn**.
 - Nút vẽ (Drawing) không bấm được trên app điện thoại; trên điện thoại hãy mở Sheet bằng trình duyệt và dùng menu.
 
@@ -155,6 +155,18 @@ Giữ token bí mật: ai có token đều chạy được Actor và tiêu credi
 - Mọi người dùng chung Sheet thì dùng chung bộ đếm.
 
 ## Cấu trúc sheet
+
+Sheet nền tảng (`TikTok`, `Threads`):
+
+| Dòng | Nội dung |
+|------|----------|
+| 1–4 | Vùng trống để đặt nút GET, hướng dẫn hoặc logo. Script không ghi vào đây. |
+| 5 | Tiêu đề bảng (cố định khi cuộn) |
+| 6 trở đi | Mỗi dòng 1 bài đăng |
+
+Dòng tiêu đề chỉnh bằng `CONFIG.HEADER_ROW` trong `Code.gs` (mặc định `5`). Sheet lịch sử vẫn để tiêu đề ở dòng 1.
+
+Các cột:
 
 | Cột | Tiêu đề | Ý nghĩa |
 |-----|---------|---------|

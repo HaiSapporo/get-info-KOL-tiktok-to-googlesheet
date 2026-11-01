@@ -104,19 +104,19 @@ Keep the token private: anyone who has it can run Actors and spend your credit. 
 
 ### 2. Add a GET button on each platform sheet
 
-1. Open the `TikTok` sheet: **Insert → Drawing**, draw a rectangle, type **GET**, then **Save and Close**.
+1. Open the `TikTok` sheet: **Insert → Drawing**, draw a rectangle, type **GET**, then **Save and Close**. Place it in **rows 1–4**, which are kept free for buttons and instructions; the table header is on row 5 and stays frozen, so the button is always visible.
 2. Click the button → the **⋮** menu on it → **Assign script** → type `getStats` → **OK**.
 3. Repeat on the `Threads` sheet. `getStats` always works on the sheet that is open, so every button uses the same function.
 4. Recommended: **Data → Protect sheets and ranges** so that users can only edit column A.
 
 ### Upgrading from version 1.x (TikTok KOL Tracker)
 
-Paste the new `Code.gs` and run **1. Tạo sheet & tiêu đề** once. The old sheets `KOL_Tracking` and `Lich_Su` are renamed to `TikTok` and `TikTok_LichSu`; data, columns and the existing GET button keep working. The token you saved before is kept.
+Paste the new `Code.gs` and run **1. Tạo sheet & tiêu đề** once. The old sheets `KOL_Tracking` and `Lich_Su` are renamed to `TikTok` and `TikTok_LichSu`, and 4 empty rows are inserted above the old header so it moves to row 5; data, columns and the existing GET button keep working. The token you saved before is kept.
 
 ## Usage
 
 1. Open the sheet of the platform (`TikTok` or `Threads`).
-2. Paste post links into **column A**, one per row, starting at row 2.
+2. Paste post links into **column A**, one per row, starting at row 6 (under the header on row 5).
 3. Click **GET** and wait 1–2 minutes.
 4. Numbers appear in the following columns. Check the status column (`Trạng thái`).
 
@@ -150,7 +150,17 @@ To avoid unexpected costs, the script counts the links it sends to Apify, for al
 
 ## Sheet layout
 
-Platform sheet columns (headers are in Vietnamese):
+Platform sheets (`TikTok`, `Threads`):
+
+| Rows | Content |
+|------|---------|
+| 1–4 | Free space for the GET button, instructions or a logo. The script never writes here. |
+| 5 | Table header (frozen) |
+| 6+ | One post per row |
+
+The header row is set by `CONFIG.HEADER_ROW` in `Code.gs` (default `5`). History sheets keep their header on row 1.
+
+Columns (headers are in Vietnamese):
 
 | Col | Header | Meaning |
 |-----|--------|---------|

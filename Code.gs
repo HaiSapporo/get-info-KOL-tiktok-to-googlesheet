@@ -17,7 +17,7 @@
 
 const CONFIG = {
   APP_NAME: 'Social Analysis',
-  HEADER_ROW: 1,
+  HEADER_ROW: 5,                  // dòng tiêu đề của sheet nền tảng; dòng 1–4 để trống cho nút GET
   APIFY_BASE: 'https://api.apify.com/v2',
   BATCH_SIZE: 50,                 // số link gửi trong 1 lần chạy Apify
   POLL_WAIT_SECS: 45,             // mỗi lần hỏi trạng thái, Apify giữ kết nối tối đa N giây
@@ -199,6 +199,7 @@ function setupSheets() {
     }
 
     const main = ss.getSheetByName(p.sheet) || ss.insertSheet(p.sheet);
+    moveHeaderDown_(main);
     main.getRange(CONFIG.HEADER_ROW, 1, 1, L.WIDTH)
       .setValues([L.headers]).setFontWeight('bold').setBackground('#000000').setFontColor('#ffffff');
     main.setFrozenRows(CONFIG.HEADER_ROW);
@@ -213,6 +214,22 @@ function setupSheets() {
     hist.getRange(1, 1, 1, hh.length).setValues([hh]).setFontWeight('bold');
     hist.setFrozenRows(1);
   });
+}
+
+/**
+ * Sheet tạo từ bản cũ có tiêu đề ở dòng trên HEADER_ROW (vd dòng 1):
+ * chèn thêm dòng trống phía trên để đẩy tiêu đề + dữ liệu xuống, không mất dữ liệu.
+ */
+function moveHeaderDown_(sheet) {
+  const top = Math.min(sheet.getLastRow(), CONFIG.HEADER_ROW - 1);
+  if (top < 1) return;
+  const colA = sheet.getRange(1, 1, top, 1).getValues();
+  for (let r = 1; r <= top; r++) {
+    if (/^Link (video|bài đăng)$/.test(String(colA[r - 1][0]).trim())) {
+      sheet.insertRowsBefore(r, CONFIG.HEADER_ROW - r);
+      return;
+    }
+  }
 }
 
 function renameIfExists_(ss, oldName, newName) {
@@ -546,8 +563,10 @@ function platformSheetNames_() {
   return Object.keys(PLATFORMS).map(function (k) { return '"' + PLATFORMS[k].sheet + '"'; }).join(', ');
 }
 
+/** Vùng dữ liệu của 1 hoặc nhiều cột, từ dưới dòng tiêu đề đến hết sheet */
 function colRange_(sheet, col, count) {
-  return sheet.getRange(1, col, sheet.getMaxRows(), count);
+  const first = CONFIG.HEADER_ROW + 1;
+  return sheet.getRange(first, col, Math.max(1, sheet.getMaxRows() - first + 1), count);
 }
 
 /** Số liệu bị ẩn / không có (null) thì để trống thay vì 0 */
